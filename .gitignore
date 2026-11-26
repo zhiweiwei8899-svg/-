@@ -30,3 +30,9 @@ htmlcov/
 *.swp
 logs/
 *.log
+
+# 本地运行产物
+workbench.db
+workbench.db-*
+raw-events.ndjson
+workbench/.env
