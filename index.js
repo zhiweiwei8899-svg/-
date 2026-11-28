@@ -8,13 +8,33 @@
  */
 import { execFile } from 'node:child_process'
 import { existsSync } from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const PACKAGE_DIR = path.dirname(fileURLToPath(import.meta.url))
 const REPO_DIR = process.env.DINGTALK_WORKBENCH_REPO || PACKAGE_DIR
+// A bundle installed from GitHub lives under node_modules, where a later
+// install or prune can rewrite or drop the directory. Never keep the database
+// there: checkout installs use the gitignored file in the checkout, package
+// installs fall back to the user data directory.
+const INSTALLED_AS_PACKAGE =
+  !process.env.DINGTALK_WORKBENCH_REPO && /[\\/]node_modules[\\/]/.test(PACKAGE_DIR)
+
+/** Per-user data directory for a package install. */
+function userDataDir() {
+  const base = process.env.LOCALAPPDATA || process.env.XDG_DATA_HOME
+  return base
+    ? path.join(base, 'dsh-dingtalk-workbench')
+    : path.join(os.homedir(), '.local', 'share', 'dsh-dingtalk-workbench')
+}
+
+const DEFAULT_DB =
+  process.env.DINGTALK_WORKBENCH_DB ||
+  (INSTALLED_AS_PACKAGE
+    ? path.join(userDataDir(), 'workbench.db')
+    : path.join(REPO_DIR, 'workbench', 'workbench.db'))
 const INGEST_SCRIPT = path.join(REPO_DIR, 'workbench', 'collector', 'ingest.py')
-const DEFAULT_DB = path.join(REPO_DIR, 'workbench', 'workbench.db')
 const ACTIONS = ['ingest', 'init-db', 'stats', 'search']
 const MAX_BUFFER = 16 * 1024 * 1024
 const PYTHON_PROBE = [
@@ -214,7 +234,8 @@ function workbenchTool() {
         },
         dbPath: {
           type: 'string',
-          description: '要读写的 SQLite 文件。默认是检出目录下的 workbench/workbench.db。',
+          description:
+            '要读写的 SQLite 文件。默认：检出安装用检出目录下的 workbench/workbench.db，作为包安装用用户数据目录里的 workbench.db。',
         },
         keyword: {
           type: 'string',

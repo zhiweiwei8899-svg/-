@@ -42,6 +42,11 @@
 Windows 上若 `python` 是 Microsoft Store 的占位程序（`python --version` 退出码 9009），
 请装真 Python，或设 `DINGTALK_WORKBENCH_PYTHON` 指向解释器；检出目录可用 `DINGTALK_WORKBENCH_REPO` 覆盖。
 
+数据库默认位置随安装形态变化：检出安装用 `workbench/workbench.db`（已在 `.gitignore`），
+从 GitHub 作为包安装时用用户数据目录（Windows `%LOCALAPPDATA%\dsh-dingtalk-workbench\`，
+其他平台 `$XDG_DATA_HOME` 或 `~/.local/share/`），避免写进 `node_modules` 被重装清理。
+`DINGTALK_WORKBENCH_DB` 可指定任意路径；工具结果里始终回显实际使用的库文件。
+
 不装插件也能用同一条链路：
 
 ```bash
