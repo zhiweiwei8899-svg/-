@@ -22,6 +22,33 @@
 
 所有"为什么这么定"的记录集中在 [决策记录索引](docs/adr/README.md)。
 
+## 作为 DSH 插件接入
+
+仓库根目录同时是一个 DeepSeek Harness 插件包（`package.json` + `cordis.patch.yml` + `index.js`）。
+装好之后 DSH 多出一个 `dingtalk_workbench` 工具，负责离线入库与查询：
+
+| action | 作用 |
+|---|---|
+| `ingest` | 把导出的 NDJSON 逐行归一化写入 SQLite，按消息幂等 |
+| `init-db` | 按 `workbench/db/schema.sql` 建表或升级结构 |
+| `stats` | 报会话 / 消息 / 附件计数与最新一条时间 |
+| `search` | 检索正文；3 个字符起走 FTS5 trigram，更短走子串扫描 |
+
+本地目录安装：DSH → 插件 → 添加插件，填本仓库的绝对路径；装完在插件列表确认「钉钉数据底座」这一行，
+再新开一个会话调用工具验证。从 GitHub 安装则填 `https://github.com/zhiweiwei8899-svg/-`。
+
+依赖：入库与查询只用标准库（`sqlite3` / `json`），但需要一个带 `sqlite3` 的 Python 3。
+插件按 `DINGTALK_WORKBENCH_PYTHON` → `py` / `python3` / `python` → DSH 自带运行时 的顺序探测。
+Windows 上若 `python` 是 Microsoft Store 的占位程序（`python --version` 退出码 9009），
+请装真 Python，或设 `DINGTALK_WORKBENCH_PYTHON` 指向解释器；检出目录可用 `DINGTALK_WORKBENCH_REPO` 覆盖。
+
+不装插件也能用同一条链路：
+
+```bash
+python3 workbench/collector/ingest.py --action ingest --ndjson raw-events.ndjson
+python3 workbench/collector/ingest.py --action stats
+```
+
 ## 提交规范
 
 采用 Conventional Commits：

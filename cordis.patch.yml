@@ -1,0 +1,6 @@
+# dsh-dingtalk-workbench bundle patch: inserts the workbench tool row.
+# The row mounts the host half in index.js, which registers the
+# `dingtalk_workbench` tool over workbench/collector/ingest.py.
+- insert:
+    - id: dingtalk-workbench
+      name: 'dsh-dingtalk-workbench'

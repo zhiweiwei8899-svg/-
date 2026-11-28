@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "钉钉数据底座",
+    "description": "用 workbench 自带的归一化脚本，把导出的钉钉事件 NDJSON 写入检出目录里的本地 SQLite，并回报计数、会话或消息检索结果。需要本机有带 sqlite3 的 Python 3，结果里总带实际使用的数据库文件。入库按消息幂等，同一份导出重复跑不会多出行。可用 DINGTALK_WORKBENCH_PYTHON 指定解释器、用 DINGTALK_WORKBENCH_REPO 指定检出目录。停用插件只会移除 dingtalk_workbench 工具，数据库文件保留。"
+  }
+}

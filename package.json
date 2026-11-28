@@ -1,0 +1,40 @@
+{
+  "name": "dsh-dingtalk-workbench",
+  "version": "0.1.0",
+  "description": "DeepSeek Harness 插件：把导出的钉钉事件 NDJSON 用 workbench 自带采集器归一化入本地 SQLite，并读取统计、会话与检索结果",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "workbench",
+    "scripts",
+    "docs"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "dingtalk",
+    "dws",
+    "sqlite",
+    "ndjson"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhiweiwei8899-svg/-.git"
+  }
+}

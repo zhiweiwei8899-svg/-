@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "DingTalk workbench",
+    "description": "Imports an exported DingTalk event NDJSON file into the workbench checkout's local SQLite store with the repo's own normalizer, then reports counts, conversations, or search results over the ingested text. Needs Python 3 with sqlite3 on this machine, and the result always names the database file it touched. Importing is idempotent per message, so re-running the same export adds nothing. Set DINGTALK_WORKBENCH_PYTHON or DINGTALK_WORKBENCH_REPO to point at another interpreter or checkout. Turning the plugin off removes the dingtalk_workbench tool and leaves the database file in place."
+  }
+}
